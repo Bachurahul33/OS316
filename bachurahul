@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<pthread.h>
+#include<semaphore.h>
+pthread_t t1,t2,t3,t4,t5;
+pthread_mutex_t l1,l2;
+int a;
+void *average(void *arg);
+void *maximum(void *arg);
+void *minimum(void *arg);
+void *login(void *arg);
+main()
+{
+	
+	    int i;
+        pthread_create(&t1,NULL,&login,NULL);
+		pthread_join(t1,NULL);
+		return 0;
+}
+void *average(void *arg)
+{   
+	pthread_mutex_lock(&l1);
+	int bl[8],i,n,sum=0;
+	float avg;
+	printf("\nPlease enter the no .of intergers : ");
+	scanf("%d",&n);
+	printf("\nEnter the intergers : ");
+	for(i=0;i<n;i++)
+	scanf("%d",&bl[i]);
+	for(i=0;i<n;i++)
+	sum=sum+bl[i];
+	avg=sum/n;
+	printf("The average of given numbers is  %f",avg);
+	pthread_mutex_unlock(&l1);
+	pthread_exit(NULL);
+}
+void *maximum(void *arg)
+{
+	pthread_mutex_lock(&l2);
+	
+	int bl[8],i,n,max,avg;
+	printf("\nenter the no .of intergers : ");
+	scanf("%d",&n);
+	printf("\nEnter the intergers : ");
+	for(i=0;i<n;i++)
+	scanf("%d",&bl[i]);i=0;
+	max=bl[i];
+	for(i=0;i<n;i++)
+	{
+		if(max<=bl[i])
+		max=bl[i];
+	}
+	printf("The maximum of given numbers is  %d:",max);
+	pthread_mutex_unlock(&l2);
+		pthread_exit(NULL);
+}
+void *minimum(void *arg)
+{
+	pthread_mutex_lock(&l1);
+	
+	int bl[8],i,n,min,avg;
+	printf("\nenter the no .of intergers : ");
+	scanf("%d",&n);
+	printf("\nEnter the intergers : ");
+	for(i=0;i<n;i++)
+	scanf("%d",&bl[i]);i=0;
+	min=bl[i];
+	for(i=0;i<n;i++)
+	{
+		if(min>=bl[i])
+		min=bl[i];
+	}
+	printf("The maximum of given numbers is  %d:",min);
+	pthread_mutex_unlock(&l1);
+    	pthread_exit(NULL);
+}
+void *login(void *arg)
+{
+	float t;
+    printf("\n1. For Average\n2. For Maximum\n3. For Minimum\n4. For Exit\nEnter Your choice :: ");
+    scanf("%d",&a);
+
+	if(a==1)
+	{ 
+	   	printf("\nAverage\n");
+		pthread_create(&t3,NULL,&average,NULL);
+		pthread_join(t3,NULL);
+     }	
+     
+	 else if(a==2)
+	{ 
+	
+	 	printf("\nMaximum\n");
+		pthread_create(&t4,NULL,&maximum,NULL);
+		pthread_join(t4,NULL);
+     }
+	
+	
+	else if(a==3)
+	{ 
+	 	printf("\nMinimum \n");
+		pthread_create(&t5,NULL,&minimum,NULL);
+		pthread_join(t5,NULL);
+     }	
+    
+	else if(a==4)
+	{
+		pthread_exit(NULL);
+		return 0;
+	}
+	pthread_exit(NULL);}
